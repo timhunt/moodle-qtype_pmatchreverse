@@ -100,6 +100,7 @@ class qtype_pmatchreverse extends question_type {
         parent::initialise_question_instance($question, $questiondata);
         foreach ($questiondata->options->answers as $answer) {
             $question->sentences[$answer->answer] = ($answer->fraction != 0);
+            $question->sentenceids[$answer->answer] = $answer->id;
         }
     }
 
@@ -120,7 +121,19 @@ class qtype_pmatchreverse extends question_type {
     }
 
     public function get_possible_responses($questiondata) {
-        // TODO.
-        return array();
+        $numparts = count($questiondata->options->answers);
+        $parts = array();
+        foreach ($questiondata->options->answers as $answer) {
+            $parts[$answer->id] = array(
+                1 => new question_possible_response(get_string('matchesx', 'qtype_pmatchreverse', $answer->answer),
+                        $shouldmatch / $numparts),
+                0 => new question_possible_response(get_string('doesnotmatchex', 'qtype_pmatchreverse', $answer->answer),
+                        (!$shouldmatch) / $numparts),
+            );
+        }
+
+        $parts[0] = array(question_possible_response::no_response());
+
+        return $parts;
     }
 }

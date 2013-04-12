@@ -67,13 +67,15 @@ class qtype_pmatchreverse_test extends advanced_testcase {
 
     public function test_get_possible_responses() {
         $q = test_question_maker::get_question_data('pmatchreverse');
-        // TODO
+
         $this->assertEquals(array(
-            $q->id => array(
-                13 => new question_possible_response('frog', 1),
-                14 => new question_possible_response('toad', 0.8),
-                15 => new question_possible_response('*', 0),
-                null => question_possible_response::no_response()
+            13 => array(
+                1 => new question_possible_response(get_string('matchesx', 'qtype_pmatchreverse', 'frog'), 0.5),
+                0 => new question_possible_response(get_string('doesnotmatchex', 'qtype_pmatchreverse', 'frog'), 0),
+            ),
+            14 => array(
+                1 => new question_possible_response(get_string('matchesx', 'qtype_pmatchreverse', 'toad'), 0),
+                0 => new question_possible_response(get_string('doesnotmatchex', 'qtype_pmatchreverse', 'toad'), 0.5),
             ),
         ), $this->qtype->get_possible_responses($q));
     }

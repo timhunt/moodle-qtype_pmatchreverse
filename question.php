@@ -42,12 +42,31 @@ class qtype_pmatchreverse_question extends question_graded_automatically_with_co
     public $incorrectfeedback;
     public $incorrectfeedbackformat;
 
-    /** @var array string => bool, the given sentences, and whether the
-     * expression should match them or not. */
+    /**
+     * @var array string => bool, the given sentences, and whether the
+     * expression should match them or not.
+     */
     public $sentences = array();
+
+    /**
+     * @var array string => int, the id of each sentence in the DB.
+     */
+    public $sentenceids = array();
 
     public function get_expected_data() {
         return array('answer' => PARAM_RAW_TRIMMED);
+    }
+
+    public function get_question_summary() {
+        $bits = array();
+        foreach ($this->sentences as $sentence => $shouldmatch) {
+            if ($shouldmatch) {
+                $bits[] = get_string('matchx', 'qtype_pmatchreverse', $sentence);
+            } else {
+                $bits[] = get_string('dontmatchx', 'qtype_pmatchreverse', $sentence);
+            }
+        }
+        return implode('; ', $bits);
     }
 
     public function summarise_response(array $response) {
@@ -56,6 +75,24 @@ class qtype_pmatchreverse_question extends question_graded_automatically_with_co
         } else {
             return null;
         }
+    }
+
+    public function classify_response(array $response) {
+        if (empty($response['answer'])) {
+            return array(0 => question_classified_response::no_response());
+        }
+
+        $expression = $this->parse_expression($response['answer']);
+        $numparts = count($this->sentences);
+
+        $parts = array();
+        foreach ($this->sentences as $sentence => $shouldmatch) {
+            $doesmatch = $this->sentence_matches_expression($sentence, $expression);
+            $parts[$this->sentenceids[$sentence]] = new question_classified_response($doesmatch, $response['answer'],
+                    $this->compare_bools($shouldmatch, $doesmatch) / $numparts);
+        }
+
+        return $parts;
     }
 
     public function is_complete_response(array $response) {
@@ -120,12 +157,21 @@ class qtype_pmatchreverse_question extends question_graded_automatically_with_co
         return $expression->matches(new pmatch_parsed_string($sentence));
     }
 
+    /**
+     * @param bool $shouldmatch a bool.
+     * @param bool $doesmatch another bool.
+     * @return bool whether the two inputs are the same.
+     */
+    public function compare_bools($shouldmatch, $doesmatch) {
+        return !($shouldmatch xor $doesmatch);
+    }
+
     public function grade_response(array $response) {
-        $expression = new pmatch_expression($response['answer']);
+        $expression = $this->parse_expression($response['answer']);
 
         $numright = 0;
         foreach ($this->sentences as $sentence => $shouldmatch) {
-            if (!($this->sentence_matches_expression($sentence, $expression) xor $shouldmatch)) {
+            if ($this->compare_bools($shouldmatch, $this->sentence_matches_expression($sentence, $expression))) {
                 $numright += 1;
             }
         }
@@ -134,7 +180,29 @@ class qtype_pmatchreverse_question extends question_graded_automatically_with_co
     }
 
     public function compute_final_grade($responses, $totaltries) {
-        // TODO.
-        return 0;
+        $expressions = array();
+        foreach ($responses as $i => $response) {
+            $expressions[$i] = $this->parse_expression($response['answer']);
+        }
+
+        $totalscore = 0;
+        foreach ($this->sentences as $sentence => $shouldmatch) {
+            $lastwrongindex = -1;
+            $finallyright = false;
+            foreach ($expressions as $i => $expression) {
+                if ($this->compare_bools($shouldmatch, $this->sentence_matches_expression($sentence, $expression))) {
+                    $finallyright = true;
+                } else {
+                    $lastwrongindex = $i;
+                    $finallyright = false;
+                }
+            }
+
+            if ($finallyright) {
+                $totalscore += max(0, 1 - ($lastwrongindex + 1) * $this->penalty);
+            }
+        }
+
+        return $totalscore / count($this->sentences);
     }
 }

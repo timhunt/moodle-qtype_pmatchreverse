@@ -69,34 +69,32 @@ class qtype_pmatchreverse_question_test extends advanced_testcase {
     }
 
     public function test_get_question_summary() {
-        $sa = test_question_maker::make_question('pmatchreverse');
-        // TODO
-        $qsummary = $sa->get_question_summary();
-        $this->assertEquals('Name an amphibian: __________', $qsummary);
+        $q = test_question_maker::make_question('pmatchreverse');
+        $this->assertEquals(get_string('matchx', 'qtype_pmatchreverse', 'frog') .
+                get_string('dontmatchx', 'qtype_pmatchreverse', 'toad'), $q->get_question_summary());
     }
 
     public function test_summarise_response() {
-        $sa = test_question_maker::make_question('pmatchreverse');
-        $summary = $sa->summarise_response(array('answer' => 'match(frog)'));
+        $q = test_question_maker::make_question('pmatchreverse');
+        $summary = $q->summarise_response(array('answer' => 'match(frog)'));
         $this->assertEquals('match(frog)', $summary);
     }
 
     public function test_classify_response() {
-        $sa = test_question_maker::make_question('pmatchreverse');
-        $sa->start_attempt(new question_attempt_step(), 1);
-        // TODO
+        $q = test_question_maker::make_question('pmatchreverse');
+        $q->start_attempt(new question_attempt_step(), 1);
+
+        $this->assertEquals(array(0 => question_classified_response::no_response()),
+                $q->classify_response(array('answer' => '')));
 
         $this->assertEquals(array(
-                new question_classified_response(13, 'frog', 1.0)),
-                $sa->classify_response(array('answer' => 'frog')));
+                13 => new question_classified_response(0, 'frog', 0),
+                14 => new question_classified_response(0, 'frog', 0.5),
+            ), $q->classify_response(array('answer' => 'frog')));
+
         $this->assertEquals(array(
-                new question_classified_response(14, 'toad', 0.8)),
-                $sa->classify_response(array('answer' => 'toad')));
-        $this->assertEquals(array(
-                new question_classified_response(15, 'cat', 0.0)),
-                $sa->classify_response(array('answer' => 'cat')));
-        $this->assertEquals(array(
-                question_classified_response::no_response()),
-                $sa->classify_response(array('answer' => '')));
+                new question_classified_response(1, 'match(frog)', 0.5),
+                new question_classified_response(0, 'match(frog)', 0.5),
+            ), $q->classify_response(array('answer' => 'match(frog)')));
     }
 }

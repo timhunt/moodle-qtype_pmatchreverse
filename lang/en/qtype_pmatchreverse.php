@@ -25,8 +25,13 @@
 $string['addmoresentences'] = 'Blanks for {no} more sentences';
 $string['defaultquestiontext'] = 'Please enter a pattern-match expression which matches, or not, the given example sentences.';
 $string['doesmatch'] = 'Does match';
+$string['doesnotmatchex'] = 'Does not match \'{$a}\'';
+$string['dontmatchx'] = 'Dont\'s match: {$a}';
 $string['examplesentencen'] = 'Example sentence {$a}';
 $string['examplesentencerequired'] = 'You must enter at least one example sentence';
+$string['examplesmustbeunique'] = 'Each example setence must be different.';
+$string['matchx'] = 'Match: {$a}';
+$string['matchesx'] = 'Does not match \'{$a}\'';
 $string['pluginname'] = 'Reverse pattern match';
 $string['pluginname_help'] = 'With the pattern match question type, the sentence typed by the student is graded using pattern match rules entered by the teacer. The reverse pattern-match question type is designed to teach people how to create pattern match questions. Some example sentences entered by the teacher must be matched, or not, by a match expression entered by the student.';
 $string['pluginname_link'] = 'question/type/pmatchreverse';

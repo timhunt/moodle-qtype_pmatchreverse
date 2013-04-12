@@ -84,7 +84,8 @@ class qtype_pmatchreverse_renderer extends qtype_with_combined_feedback_renderer
             if ($options->correctness || $options->feedback) {
                 $doesmatch = $question->sentence_matches_expression($sentence, $expression);
                 $row->cells[] = new html_table_cell($this->display_bool($doesmatch));
-                $row->attributes['class'] = $this->feedback_class((float)!($doesmatch xor $shouldmatch));
+                $row->attributes['class'] = $this->feedback_class(
+                        (float) $question->compare_bools($shouldmatch, $doesmatch));
             }
             $table->data[] = $row;
         }

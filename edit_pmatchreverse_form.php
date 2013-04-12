@@ -85,16 +85,21 @@ class qtype_pmatchreverse_edit_form extends question_edit_form {
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
 
+        $uniqueanswers = array();
         $answers = $data['answer'];
         $answercount = 0;
         foreach ($answers as $key => $answer) {
             $trimmedanswer = trim($answer);
             if ($trimmedanswer !== '') {
                 $answercount++;
+                if (array_key_exists($trimmedanswer, $uniqueanswers)) {
+                    $errors['answeroptions[' . $key . ']'] = get_string('examplesmustbeunique', 'qtype_pmatchreverse');
+                }
+                $uniqueanswers[$trimmedanswer] = 1;
             }
         }
         if ($answercount==0) {
-            $errors['answeroptions[0]'] = get_string('examplesentencerequired', 'qtype_pmatchreverse', 1);
+            $errors['answeroptions[0]'] = get_string('examplesentencerequired', 'qtype_pmatchreverse');
         }
         return $errors;
     }

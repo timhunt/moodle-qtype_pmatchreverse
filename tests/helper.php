@@ -48,9 +48,13 @@ class qtype_pmatchreverse_test_helper extends question_test_helper {
         $q->name = 'Match frog but not toad';
         $q->questiontext = 'Please enter a pattern-match expression which matches, or not, the given example sentences.';
         $q->generalfeedback = 'match(frog) is the simplest answer you could have given.';
-        $q->answers = array(
-            13 => new question_answer(13, 'frog', 1, '', FORMAT_HTML),
-            14 => new question_answer(14, 'toad', 0, '', FORMAT_HTML),
+        $q->sentences = array(
+            'frog' => 1,
+            'toad' => 0,
+        );
+        $q->sentenceids = array(
+            'frog' => 13,
+            'toad' => 14,
         );
         $q->qtype = question_bank::get_qtype('pmatchreverse');
 
