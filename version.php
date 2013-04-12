@@ -15,20 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * YOURQTYPENAME question type version information.
+ * Version information for the pmatchreverse question type.
  *
- * @package    qtype
- * @subpackage YOURQTYPENAME
- * @copyright  THEYEAR YOURNAME (YOURCONTACTINFO)
-
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   qtype_pmatchreverse
+ * @copyright 2013 Tim Hunt
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'qtype_YOURQTYPENAME';
-$plugin->version   = 2013012900;
-
-$plugin->requires  = 2012062504;
-
+$plugin->version   = 2013041200;
+$plugin->requires  = 2012120300;
+$plugin->cron      = 0;
+$plugin->component = 'qtype_pmatchreverse';
 $plugin->maturity  = MATURITY_ALPHA;
+$plugin->release   = 'v0.0+';
+
+$plugin->dependencies = array(
+    'qtype_pmatch' => 2013021200,
+);
