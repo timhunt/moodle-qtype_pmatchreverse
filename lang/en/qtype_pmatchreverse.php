@@ -22,9 +22,17 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['addmoresentences'] = 'Blanks for {no} more sentences';
+$string['defaultquestiontext'] = 'Please enter a pattern-match expression which matches, or not, the given example sentences.';
+$string['doesmatch'] = 'Does match';
+$string['examplesentencen'] = 'Example sentence {$a}';
+$string['examplesentencerequired'] = 'You must enter at least one example sentence';
 $string['pluginname'] = 'Reverse pattern match';
 $string['pluginname_help'] = 'With the pattern match question type, the sentence typed by the student is graded using pattern match rules entered by the teacer. The reverse pattern-match question type is designed to teach people how to create pattern match questions. Some example sentences entered by the teacher must be matched, or not, by a match expression entered by the student.';
 $string['pluginname_link'] = 'question/type/pmatchreverse';
 $string['pluginnameadding'] = 'Adding a reverse pattern match question';
 $string['pluginnameediting'] = 'Editing a reverse pattern match question';
 $string['pluginnamesummary'] = 'With the pattern match question type, the sentence typed by the student is graded using pattern match rules entered by the teacer. The reverse pattern-match question type is designed to teach people how to create pattern match questions. Some example sentences entered by the teacher must be matched, or not, by a match expression entered by the student.';
+$string['sentence'] = 'Sentence';
+$string['shouldmatch'] = 'Should match';
+$string['shouldnotmatch'] = 'Should not match';

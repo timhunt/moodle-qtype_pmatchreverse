@@ -27,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/questionlib.php');
 require_once($CFG->dirroot . '/question/engine/lib.php');
-require_once($CFG->dirroot . '/question/type/pmatchreverse/question.php');
 
 
 /**
@@ -38,27 +37,85 @@ require_once($CFG->dirroot . '/question/type/pmatchreverse/question.php');
  */
 class qtype_pmatchreverse extends question_type {
 
+    public function extra_question_fields() {
+        return array('qtype_pmatchreverse_options', 'correctfeedback', 'correctfeedbackformat',
+                'partiallycorrectfeedback', 'partiallycorrectfeedbackformat',
+                'incorrectfeedback', 'incorrectfeedbackformat');
+    }
+
+    public function save_question_options($question) {
+        global $DB;
+        $context = $question->context;
+
+        $oldanswers = $DB->get_records('question_answers',
+                array('question' => $question->id), 'id ASC');
+
+        // Insert all the new answers
+        foreach ($question->answer as $key => $answerdata) {
+            if (trim($answerdata) == '') {
+                continue;
+            }
+
+            if ($answer = array_shift($oldanswers)) {
+                $answer->answer   = trim($answerdata);
+                $answer->fraction = !empty($question->fraction[$key]);
+                $DB->update_record('question_answers', $answer);
+        
+            } else {
+                $answer = new stdClass();
+                $answer->question       = $question->id;
+                $answer->answer         = trim($answerdata);
+                $answer->answerformat   = FORMAT_PLAIN;
+                $answer->fraction       = !empty($question->fraction[$key]);
+                $answer->feedback       = '';
+                $answer->feedbackformat = FORMAT_HTML;
+                $DB->insert_record('question_answers', $answer);
+            }
+        }
+
+        // Delete old answer records
+        foreach ($oldanswers as $oa) {
+            $DB->delete_records('question_answers', array('id' => $oa->id));
+        }
+
+        // Save combined feedback.
+        $options = $DB->get_record('qtype_pmatchreverse_options',
+                array('questionid' => $question->id));
+        if (!$options) {
+            $options = new stdClass();
+            $options->questionid = $question->id;
+            $options->correctfeedback = '';
+            $options->partiallycorrectfeedback = '';
+            $options->incorrectfeedback = '';
+            $options->id = $DB->insert_record('qtype_pmatchreverse_options', $options);
+        }
+
+        $options = $this->save_combined_feedback_helper($options, $question, $context, true);
+        $DB->update_record('qtype_pmatchreverse_options', $options);
+
+        $this->save_hints($question);
+    }
+
+    protected function initialise_question_instance(question_definition $question, $questiondata) {
+        parent::initialise_question_instance($question, $questiondata);
+        foreach ($questiondata->options->answers as $answer) {
+            $question->sentences[$answer->answer] = ($answer->fraction != 0);
+        }
+    }
+
     public function move_files($questionid, $oldcontextid, $newcontextid) {
         parent::move_files($questionid, $oldcontextid, $newcontextid);
+        $this->move_files_in_combined_feedback($questionid, $oldcontextid, $newcontextid);
         $this->move_files_in_hints($questionid, $oldcontextid, $newcontextid);
     }
 
     protected function delete_files($questionid, $contextid) {
         parent::delete_files($questionid, $contextid);
+        $this->delete_files_in_combined_feedback($questionid, $contextid);
         $this->delete_files_in_hints($questionid, $contextid);
     }
 
-    public function save_question_options($question) {
-        $this->save_hints($question);
-    }
-
-    protected function initialise_question_instance(question_definition $question, $questiondata) {
-        // TODO.
-        parent::initialise_question_instance($question, $questiondata);
-    }
-
     public function get_random_guess_score($questiondata) {
-        // TODO.
         return 0;
     }
 

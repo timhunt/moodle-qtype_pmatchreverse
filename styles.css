@@ -1,0 +1,6 @@
+.que.pmatchreverse table.generaltable tr.correct {
+    background-color: #afa;
+}
+.que.pmatchreverse table.generaltable tr.incorrect {
+    background-color: #faa;
+}

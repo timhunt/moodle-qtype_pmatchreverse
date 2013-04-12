@@ -35,14 +35,68 @@ defined('MOODLE_INTERNAL') || die();
 class qtype_pmatchreverse_edit_form extends question_edit_form {
 
     protected function definition_inner($mform) {
+        $this->add_per_answer_fields($mform, get_string('examplesentencen', 'qtype_pmatchreverse', '{no}'), array(
+            1 => get_string('shouldmatch', 'qtype_pmatchreverse'), 0 => get_string('shouldnotmatch', 'qtype_pmatchreverse')));
+        $this->add_combined_feedback_fields();
         $this->add_interactive_settings();
+
+        
     }
 
     protected function data_preprocessing($question) {
         $question = parent::data_preprocessing($question);
+        $question = $this->data_preprocessing_answers($question);
+        $question = $this->data_preprocessing_combined_feedback($question);
         $question = $this->data_preprocessing_hints($question);
 
+        if (empty($question->questiontext['text'])) {
+            // Nasty hack to override what the base class does. The way it
+            // prepares the questiontext field overwrites the default.
+            $question->questiontext['text'] = get_string('defaultquestiontext', 'qtype_pmatchreverse');
+        }
+
         return $question;
+    }
+
+    protected function get_more_choices_string() {
+        return get_string('addmoresentences', 'qtype_pmatchreverse');
+    }
+
+    protected function get_per_answer_fields($mform, $label, $gradeoptions,
+            &$repeatedoptions, &$answersoption) {
+
+        $answeroptions = array(
+            $mform->createElement('text', 'answer', '', array('size' => 40)),
+            $mform->createElement('select', 'fraction', '', $gradeoptions),
+        );
+
+        $repeated = array(
+            $mform->createElement('group', 'answeroptions', $label, $answeroptions, null, false),
+        );
+
+        $repeatedoptions['answer']['type'] = PARAM_RAW;
+        $repeatedoptions['fraction']['default'] = 1;
+        $repeatedoptions['fraction']['disabledif'] = array('answer', 'eq', '');
+        $answersoption = 'answers';
+
+        return $repeated;
+    }
+
+    public function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+
+        $answers = $data['answer'];
+        $answercount = 0;
+        foreach ($answers as $key => $answer) {
+            $trimmedanswer = trim($answer);
+            if ($trimmedanswer !== '') {
+                $answercount++;
+            }
+        }
+        if ($answercount==0) {
+            $errors['answeroptions[0]'] = get_string('examplesentencerequired', 'qtype_pmatchreverse', 1);
+        }
+        return $errors;
     }
 
     public function qtype() {

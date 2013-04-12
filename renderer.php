@@ -32,41 +32,80 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2013 Tim Hunt
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_pmatchreverse_renderer extends qtype_renderer {
+class qtype_pmatchreverse_renderer extends qtype_with_combined_feedback_renderer {
     public function formulation_and_controls(question_attempt $qa,
             question_display_options $options) {
 
-        $question = $qa->get_question();
-
-        $questiontext = $question->format_questiontext($qa);
-        $placeholder = false;
-        if (preg_match('/_____+/', $questiontext, $matches)) {
-            $placeholder = $matches[0];
-        }
-        $input = '**subq controls go in here**';
-
-        if ($placeholder) {
-            $questiontext = substr_replace($questiontext, $input,
-                    strpos($questiontext, $placeholder), strlen($placeholder));
+        $question      = $qa->get_question();
+        $currentanswer = $qa->get_last_qt_var('answer');
+        $inputname     = $qa->get_qt_field_name('answer');
+        if ($currentanswer) {
+            $expression = $question->parse_expression($currentanswer);
+        } else {
+            $expression = new pmatch_expression('');
         }
 
-        $result = html_writer::tag('div', $questiontext, array('class' => 'qtext'));
+        // Question text.
+        $result = html_writer::tag('div', $question->format_questiontext($qa), array('class' => 'qtext'));
 
-        /* if ($qa->get_state() == question_state::$invalid) {
+        // Input.
+        $attributes = array(
+            'id'    => $inputname,
+            'name'  => $inputname,
+            'class' => 'qtype_pmatchreverse_response',
+            'rows'  => 5,
+            'cols'  => 60,
+        );
+        if ($options->readonly) {
+            $attributes['readonly'] = 'readonly';
+        }
+        $input = html_writer::tag('textarea', s($currentanswer), $attributes);
+        $result .= html_writer::tag('div', $input, array('class' => 'ablock'));
+
+        // Any validation error.
+        if ($qa->get_state() == question_state::$invalid) {
             $result .= html_writer::nonempty_tag('div',
                     $question->get_validation_error(array('answer' => $currentanswer)),
                     array('class' => 'validationerror'));
-        }*/
+        }
+
+        // Table of sentences and whether they should / do match.
+        $table = new html_table();
+        $table->head = array(get_string('sentence', 'qtype_pmatchreverse'), get_string('shouldmatch', 'qtype_pmatchreverse'));
+        if ($options->correctness || $options->feedback) {
+            $table->head[] = get_string('doesmatch', 'qtype_pmatchreverse');
+        }
+        foreach ($question->sentences as $sentence => $shouldmatch) {
+            $row = new html_table_row();
+            $row->cells = array(
+                new html_table_cell(s($sentence)),
+                new html_table_cell($this->display_bool($shouldmatch)),
+            );
+            if ($options->correctness || $options->feedback) {
+                $doesmatch = $question->sentence_matches_expression($sentence, $expression);
+                $row->cells[] = new html_table_cell($this->display_bool($doesmatch));
+                $row->attributes['class'] = $this->feedback_class((float)!($doesmatch xor $shouldmatch));
+            }
+            $table->data[] = $row;
+        }
+        $result .= html_writer::table($table);
+
         return $result;
     }
 
     public function specific_feedback(question_attempt $qa) {
-        // TODO.
-        return '';
+        return $this->combined_feedback($qa);
     }
 
-    public function correct_response(question_attempt $qa) {
-        // TODO.
-        return '';
+    /**
+     * @param bool $bool a boolean value.
+     * @return string Yes or No.
+     */
+    protected function display_bool($bool) {
+        if ($bool) {
+            return get_string('yes');
+        } else {
+            return get_string('no');
+        }
     }
 }
