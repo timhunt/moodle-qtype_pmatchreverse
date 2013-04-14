@@ -103,8 +103,8 @@ class qtype_pmatchreverse_question extends question_graded_automatically_with_co
         return $expression->is_valid();
     }
 
-    public function is_gradeable_response(array $response) {
-        return array_key_exists('answer', $response);
+    public function is_gradable_response(array $response) {
+        return array_key_exists('answer', $response) && $response['answer'] !== '';
     }
 
     public function get_validation_error(array $response) {
@@ -168,6 +168,10 @@ class qtype_pmatchreverse_question extends question_graded_automatically_with_co
 
     public function grade_response(array $response) {
         $expression = $this->parse_expression($response['answer']);
+
+        if (!$expression->is_valid()) {
+            return array(0, question_state::$gradedwrong);
+        }
 
         $numright = 0;
         foreach ($this->sentences as $sentence => $shouldmatch) {

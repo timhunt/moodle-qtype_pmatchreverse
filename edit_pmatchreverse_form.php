@@ -39,8 +39,6 @@ class qtype_pmatchreverse_edit_form extends question_edit_form {
             1 => get_string('shouldmatch', 'qtype_pmatchreverse'), 0 => get_string('shouldnotmatch', 'qtype_pmatchreverse')));
         $this->add_combined_feedback_fields();
         $this->add_interactive_settings();
-
-        
     }
 
     protected function data_preprocessing($question) {

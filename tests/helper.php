@@ -48,6 +48,7 @@ class qtype_pmatchreverse_test_helper extends question_test_helper {
         $q->name = 'Match frog but not toad';
         $q->questiontext = 'Please enter a pattern-match expression which matches, or not, the given example sentences.';
         $q->generalfeedback = 'match(frog) is the simplest answer you could have given.';
+        test_question_maker::set_standard_combined_feedback_fields($q);
         $q->sentences = array(
             'frog' => 1,
             'toad' => 0,
@@ -55,6 +56,10 @@ class qtype_pmatchreverse_test_helper extends question_test_helper {
         $q->sentenceids = array(
             'frog' => 13,
             'toad' => 14,
+        );
+        $q->hints = array(
+            new question_hint(1, 'Hint 1.', FORMAT_HTML),
+            new question_hint(2, 'Hint 2.', FORMAT_HTML),
         );
         $q->qtype = question_bank::get_qtype('pmatchreverse');
 
@@ -75,9 +80,15 @@ class qtype_pmatchreverse_test_helper extends question_test_helper {
         $qdata->generalfeedback = 'match(frog) is the simplest answer you could have given.';
 
         $qdata->options = new stdClass();
+        test_question_maker::set_standard_combined_feedback_fields($qdata->options);
+        unset($qdata->options->shownumcorrect);
         $qdata->options->answers = array(
             13 => new question_answer(13, 'frog', 1, '', FORMAT_HTML),
             14 => new question_answer(14, 'toad', 0, '', FORMAT_HTML),
+        );
+        $qdata->hints = array(
+            new question_hint(1, 'Hint 1.', FORMAT_HTML),
+            new question_hint(2, 'Hint 2.', FORMAT_HTML),
         );
 
         return $qdata;
@@ -95,11 +106,21 @@ class qtype_pmatchreverse_test_helper extends question_test_helper {
         $fromform->name = 'Match frog but not toad';
         $fromform->questiontext = array('text' =>
                 'Please enter a pattern-match expression which matches, or not, the given example sentences.',
-                'format' => FORMAT_HTML);
+                'format' => FORMAT_HTML, 'files' => array());
         $fromform->generalfeedback = array('text' => 'match(frog) is the simplest answer you could have given.',
+                'format' => FORMAT_HTML, 'files' => array());
+        $fromform->correctfeedback = array('text' => test_question_maker::STANDARD_OVERALL_CORRECT_FEEDBACK,
+                'format' => FORMAT_HTML);
+        $fromform->partiallycorrectfeedback = array('text' => test_question_maker::STANDARD_OVERALL_PARTIALLYCORRECT_FEEDBACK,
+                'format' => FORMAT_HTML);
+        $fromform->incorrectfeedback = array('text' => test_question_maker::STANDARD_OVERALL_INCORRECT_FEEDBACK,
                 'format' => FORMAT_HTML);
         $fromform->answer = array('frog', 'toad');
         $fromform->fraction = array(1, 0);
+        $fromform->hint = array(
+            array('text' => 'Hint 1.', 'format' => FORMAT_HTML),
+            array('text' => 'Hint 2.', 'format' => FORMAT_HTML),
+        );
 
         return $fromform;
     }

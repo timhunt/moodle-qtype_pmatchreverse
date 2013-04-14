@@ -50,7 +50,7 @@ class qtype_pmatchreverse extends question_type {
         $oldanswers = $DB->get_records('question_answers',
                 array('question' => $question->id), 'id ASC');
 
-        // Insert all the new answers
+        // Insert all the new answers.
         foreach ($question->answer as $key => $answerdata) {
             if (trim($answerdata) == '') {
                 continue;
@@ -60,7 +60,7 @@ class qtype_pmatchreverse extends question_type {
                 $answer->answer   = trim($answerdata);
                 $answer->fraction = !empty($question->fraction[$key]);
                 $DB->update_record('question_answers', $answer);
-        
+
             } else {
                 $answer = new stdClass();
                 $answer->question       = $question->id;
@@ -73,7 +73,7 @@ class qtype_pmatchreverse extends question_type {
             }
         }
 
-        // Delete old answer records
+        // Delete old answer records.
         foreach ($oldanswers as $oa) {
             $DB->delete_records('question_answers', array('id' => $oa->id));
         }
@@ -124,6 +124,7 @@ class qtype_pmatchreverse extends question_type {
         $numparts = count($questiondata->options->answers);
         $parts = array();
         foreach ($questiondata->options->answers as $answer) {
+            $shouldmatch = (int) $answer->fraction;
             $parts[$answer->id] = array(
                 1 => new question_possible_response(get_string('matchesx', 'qtype_pmatchreverse', $answer->answer),
                         $shouldmatch / $numparts),
@@ -135,5 +136,37 @@ class qtype_pmatchreverse extends question_type {
         $parts[0] = array(question_possible_response::no_response());
 
         return $parts;
+    }
+
+    public function import_from_xml($data, $question, qformat_xml $format, $extra=null) {
+        if (!isset($data['@']['type']) || $data['@']['type'] != $this->name()) {
+            return false;
+        }
+
+        $question = $format->import_headers($data);
+        $question->qtype = $this->name();
+
+        // Run through the answers.
+        $answers = $data['#']['answer'];
+        $acount = 0;
+        foreach ($answers as $answer) {
+            $ans = $format->import_answer($answer, false, $format->get_format(FORMAT_PLAIN));
+            $question->answer[$acount]   = $ans->answer['text'];
+            $question->fraction[$acount] = $ans->fraction;
+            ++$acount;
+        }
+
+        $format->import_combined_feedback($question, $data);
+        $format->import_hints($question, $data, false, false,
+                $format->get_format($question->questiontextformat));
+
+        return $question;
+    }
+
+    public function export_to_xml($question, qformat_xml $format, $extra = null) {
+        $output = '';
+        $output .= $format->write_combined_feedback($question->options, $question->id, $question->contextid);
+        $output .= $format->write_answers($question->options->answers);
+        return $output;
     }
 }

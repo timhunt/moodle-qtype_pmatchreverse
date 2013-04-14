@@ -34,6 +34,7 @@ require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
  *
  * @copyright 2013 Tim Hunt
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @group qtype_pmatchreverse
  */
 class qtype_pmatchreverse_question_test extends advanced_testcase {
 
@@ -61,7 +62,7 @@ class qtype_pmatchreverse_question_test extends advanced_testcase {
         $this->assertEquals(array(0, question_state::$gradedwrong),
                 $question->grade_response(array('answer' => 'frog')));
         $this->assertEquals(array(0, question_state::$gradedwrong),
-                $question->grade_response(array('answer' => 'match(frog)')));
+                $question->grade_response(array('answer' => 'match(toad)')));
         $this->assertEquals(array(0.5, question_state::$gradedpartial),
                 $question->grade_response(array('answer' => 'match(frog|toad)')));
         $this->assertEquals(array(1, question_state::$gradedright),
@@ -70,7 +71,7 @@ class qtype_pmatchreverse_question_test extends advanced_testcase {
 
     public function test_get_question_summary() {
         $q = test_question_maker::make_question('pmatchreverse');
-        $this->assertEquals(get_string('matchx', 'qtype_pmatchreverse', 'frog') .
+        $this->assertEquals(get_string('matchx', 'qtype_pmatchreverse', 'frog') . '; ' .
                 get_string('dontmatchx', 'qtype_pmatchreverse', 'toad'), $q->get_question_summary());
     }
 
@@ -93,8 +94,8 @@ class qtype_pmatchreverse_question_test extends advanced_testcase {
             ), $q->classify_response(array('answer' => 'frog')));
 
         $this->assertEquals(array(
-                new question_classified_response(1, 'match(frog)', 0.5),
-                new question_classified_response(0, 'match(frog)', 0.5),
+                13 => new question_classified_response(1, 'match(frog)', 0.5),
+                14 => new question_classified_response(0, 'match(frog)', 0.5),
             ), $q->classify_response(array('answer' => 'match(frog)')));
     }
 }
