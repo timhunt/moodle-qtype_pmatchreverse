@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2013041300;
-$plugin->requires  = 2013040500;
+$plugin->requires  = 2012120300;
 $plugin->cron      = 0;
 $plugin->component = 'qtype_pmatchreverse';
 $plugin->maturity  = MATURITY_ALPHA;
