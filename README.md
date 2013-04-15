@@ -17,7 +17,7 @@ This question type is compatible with Moodle 2.4+.
 To install the question type using git, type this command in the root of your
 Moodle install
 
-    git clone git://github.com/timhunt/moodle-qtype_pmatchreverse.git question/type/pmatcheverse
+    git clone git://github.com/timhunt/moodle-qtype_pmatchreverse.git question/type/pmatchreverse
     echo '/question/type/pmatchreverse' >> .git/info/exclude
 
 Alternatively, download the zip from
@@ -25,6 +25,15 @@ Alternatively, download the zip from
     https://github.com/moodleou/moodle-qtype_pmatchreverse/zipball/master
 
 unzip it into the question/type folder, and then rename the new folder to pmatchreverse.
+
+Note that you also need the pmatch question type installed:
+
+    git clone git://github.com/moodleou/moodle-editor_supsub.git lib/editor/supsub
+    echo '/lib/editor/supsub' >> .git/info/exclude
+    git clone git://github.com/moodleou/moodle-qtype_pmatch.git question/type/pmatch
+    echo '/question/type/pmatch' >> .git/info/exclude
+
+or https://moodle.org/plugins/view.php?plugin=qtype_pmatch
 
 Once the code is in place, remember to visit the Site administration -> Notifications
 page to complete the install.
