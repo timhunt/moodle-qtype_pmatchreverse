@@ -29,7 +29,7 @@ $plugin->requires  = 2012120300;
 $plugin->cron      = 0;
 $plugin->component = 'qtype_pmatchreverse';
 $plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = 'v0.1';
+$plugin->release   = 'v0.2 for Moodle 2.4+';
 
 $plugin->dependencies = array(
     'qtype_pmatch' => 2013021200,
