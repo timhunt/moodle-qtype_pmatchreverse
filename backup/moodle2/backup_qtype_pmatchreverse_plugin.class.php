@@ -53,16 +53,16 @@ class backup_qtype_pmatchreverse_plugin extends backup_qtype_plugin {
         $this->add_question_question_answers($pluginwrapper);
 
         // Now create the qtype own structures.
-        $multichoice = new backup_nested_element('pmatchreverse', array('id'), array(
+        $pmatchreverse = new backup_nested_element('pmatchreverse', array('id'), array(
             'correctfeedback', 'correctfeedbackformat',
             'partiallycorrectfeedback', 'partiallycorrectfeedbackformat',
             'incorrectfeedback', 'incorrectfeedbackformat'));
 
         // Now the own qtype tree.
-        $pluginwrapper->add_child($multichoice);
+        $pluginwrapper->add_child($pmatchreverse);
 
         // Set source to populate the data.
-        $multichoice->set_source_table('qtype_pmatchreverse_options',
+        $pmatchreverse->set_source_table('qtype_pmatchreverse_options',
                 array('questionid' => backup::VAR_PARENTID));
 
         // Don't need to annotate ids nor files.

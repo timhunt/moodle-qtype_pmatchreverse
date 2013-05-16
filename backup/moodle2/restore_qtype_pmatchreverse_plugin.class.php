@@ -54,9 +54,9 @@ class restore_qtype_pmatchreverse_plugin extends restore_qtype_plugin {
     }
 
     /**
-     * Process the qtype/multichoice element
+     * Process the qtype/pmatchreverse element
      */
-    public function process_multichoice($data) {
+    public function process_pmatchreverse($data) {
         global $DB;
 
         $data = (object)$data;
@@ -68,7 +68,7 @@ class restore_qtype_pmatchreverse_plugin extends restore_qtype_plugin {
         $questioncreated = (bool) $this->get_mappingid('question_created', $oldquestionid);
 
         // If the question has been created by restore, we need to create its
-        // question_multichoice too.
+        // qtype_pmatchreverse_options too.
         if ($questioncreated) {
             // Adjust some columns.
             $data->question = $newquestionid;
