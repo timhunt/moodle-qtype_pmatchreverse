@@ -58,7 +58,7 @@ class qtype_pmatchreverse extends question_type {
 
             if ($answer = array_shift($oldanswers)) {
                 $answer->answer   = trim($answerdata);
-                $answer->fraction = !empty($question->fraction[$key]);
+                $answer->fraction = isset($question->fraction[$key]) && ((float) $question->fraction[$key]) > 0;
                 $DB->update_record('question_answers', $answer);
 
             } else {
@@ -66,7 +66,7 @@ class qtype_pmatchreverse extends question_type {
                 $answer->question       = $question->id;
                 $answer->answer         = trim($answerdata);
                 $answer->answerformat   = FORMAT_PLAIN;
-                $answer->fraction       = !empty($question->fraction[$key]);
+                $answer->fraction       = isset($question->fraction[$key]) && ((float) $question->fraction[$key]) > 0;
                 $answer->feedback       = '';
                 $answer->feedbackformat = FORMAT_HTML;
                 $DB->insert_record('question_answers', $answer);

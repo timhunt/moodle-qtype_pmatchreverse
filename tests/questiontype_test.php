@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
+require_once($CFG->dirroot . '/question/format/xml/format.php');
 require_once($CFG->dirroot . '/question/type/pmatchreverse/questiontype.php');
 require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
 
