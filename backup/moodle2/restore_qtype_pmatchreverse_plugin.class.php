@@ -71,7 +71,7 @@ class restore_qtype_pmatchreverse_plugin extends restore_qtype_plugin {
         // qtype_pmatchreverse_options too.
         if ($questioncreated) {
             // Adjust some columns.
-            $data->question = $newquestionid;
+            $data->questionid = $newquestionid;
             // Insert record.
             $newitemid = $DB->insert_record('qtype_pmatchreverse_options', $data);
             // Create mapping (needed for decoding links).
