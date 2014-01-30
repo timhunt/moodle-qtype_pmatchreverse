@@ -100,7 +100,7 @@ class qtype_pmatchreverse_test_helper extends question_test_helper {
      */
     public function get_pmatchreverse_question_form_data_frognottoad() {
         $fromform = new stdClass();
-        test_question_maker::initialise_question_form_data($fromform);
+        $fromform->penalty = 0.3333333;
 
         $fromform->qtype = 'pmatchreverse';
         $fromform->name = 'Match frog but not toad';
