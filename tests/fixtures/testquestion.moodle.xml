@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 1  -->
+  <question type="pmatchreverse">
+    <name>
+      <text>Imported pattern match question</text>
+    </name>
+    <questiontext format="html">
+      <text>Please enter a pattern-match expression which matches, or not, the given example sentences.</text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <correctfeedback format="html">
+      <text>Your answer is correct.</text>
+    </correctfeedback>
+    <partiallycorrectfeedback format="html">
+      <text>Your answer is partially correct.</text>
+    </partiallycorrectfeedback>
+    <incorrectfeedback format="html">
+      <text>Your answer is incorrect.</text>
+    </incorrectfeedback>
+    <answer fraction="100" format="plain_text">
+      <text>The cat sat on the mat</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="100" format="plain_text">
+      <text>The frog sat on the lilly pad</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="0" format="plain_text">
+      <text>The dog barked</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <hint format="html">
+      <text>Please try again.</text>
+    </hint>
+    <hint format="html">
+      <text>Don't try too hard with this one.</text>
+    </hint>
+  </question>
+
+</quiz>

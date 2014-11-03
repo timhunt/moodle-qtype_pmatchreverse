@@ -59,8 +59,9 @@ class qtype_pmatchreverse_renderer extends qtype_with_combined_feedback_renderer
         if ($options->readonly) {
             $attributes['readonly'] = 'readonly';
         }
+        $label = html_writer::label(get_string('answer', 'question'), $inputname, false, array('class' => 'accesshide'));
         $input = html_writer::tag('textarea', s($currentanswer), $attributes);
-        $result .= html_writer::tag('div', $input, array('class' => 'ablock'));
+        $result .= html_writer::tag('div', $label . $input, array('class' => 'ablock'));
 
         // Any validation error.
         if ($qa->get_state() == question_state::$invalid) {
