@@ -129,7 +129,7 @@ class qtype_pmatchreverse_question extends question_graded_automatically_with_co
 
         } else if ($component == 'question' && in_array($filearea,
                 array('correctfeedback', 'partiallycorrectfeedback', 'incorrectfeedback'))) {
-            return $this->check_combined_feedback_file_access($qa, $options, $filearea);
+            return $this->check_combined_feedback_file_access($qa, $options, $filearea, $args);
 
         } else {
             return parent::check_file_access($qa, $options, $component, $filearea,
