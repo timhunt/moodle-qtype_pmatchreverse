@@ -1,5 +1,5 @@
 @ou @ou_vle @qtype @qtype_pmatchrevers @_switch_window @javascript
-Feature: Test all the basic functionality of this question type
+Feature: Test all the basic functionality of pmatchreverse question type
   In order train people about the pmatch syntax
   As a trainer
   I need to create and preview reverse pattern match questions.
