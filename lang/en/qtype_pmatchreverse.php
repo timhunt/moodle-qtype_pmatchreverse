@@ -41,3 +41,4 @@ $string['pluginnamesummary'] = 'With the pattern match question type, the senten
 $string['sentence'] = 'Sentence';
 $string['shouldmatch'] = 'Should match';
 $string['shouldnotmatch'] = 'Should not match';
+$string['privacy:metadata'] = 'The Reverse pattern match plugin does not store any personal data.';
