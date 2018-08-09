@@ -1,4 +1,4 @@
-@ou @ou_vle @qtype @qtype_pmatchrevers @_switch_window @javascript
+@ou @ou_vle @qtype @qtype_pmatchreverse @_switch_window @javascript
 Feature: Test all the basic functionality of pmatchreverse question type
   In order train people about the pmatch syntax
   As a trainer

@@ -96,7 +96,7 @@ class qtype_pmatchreverse_edit_form extends question_edit_form {
                 $uniqueanswers[$trimmedanswer] = 1;
             }
         }
-        if ($answercount==0) {
+        if ($answercount == 0) {
             $errors['answeroptions[0]'] = get_string('examplesentencerequired', 'qtype_pmatchreverse');
         }
         return $errors;
