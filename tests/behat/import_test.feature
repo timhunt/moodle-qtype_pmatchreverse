@@ -20,7 +20,7 @@ Feature: Import and export reverse pattern-match questions
   @javascript
   Scenario: Import and export reverse pattern-match questions
     # Import sample file.
-    When I navigate to "Import" node in "Course administration > Question bank"
+    When I navigate to "Question bank > Import" in current page administration
     And I set the field "id_format_xml" to "1"
     And I upload "question/type/pmatchreverse/tests/fixtures/testquestion.moodle.xml" file to "Import" filemanager
     And I press "id_submitbutton"
@@ -31,7 +31,8 @@ Feature: Import and export reverse pattern-match questions
     And I should see "Imported pattern match question"
 
     # Now export again.
-    When I navigate to "Export" node in "Course administration > Question bank"
+    And I am on "Course 1" course homepage
+    When I navigate to "Question bank > Export" in current page administration
     And I set the field "id_format_xml" to "1"
     And I press "Export questions to file"
     Then following "click here" should download between "1000" and "2000" bytes

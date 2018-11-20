@@ -170,6 +170,7 @@ class qtype_pmatchreverse_test extends question_testcase {
     <defaultgrade>1</defaultgrade>
     <penalty>0.3333333</penalty>
     <hidden>0</hidden>
+    <idnumber></idnumber>
     <correctfeedback format="html">
       <text>Well done!</text>
     </correctfeedback>
@@ -199,6 +200,11 @@ class qtype_pmatchreverse_test extends question_testcase {
     </hint>
   </question>
 ';
+
+        // Hack so the test passes in both 3.5 and 3.6.
+        if (strpos($xml, 'idnumber') === false) {
+            $expectedxml = str_replace("    <idnumber></idnumber>\n", '', $expectedxml);
+        }
 
         $this->assert_same_xml($expectedxml, $xml);
     }
