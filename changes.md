@@ -1,6 +1,11 @@
 # Change log for the Pattern match with JME question type
 
 
+## Changes in 1.4
+
+* Fix automated tests to pass in Moodle 3.6.
+
+
 ## Changes in 1.3
 
 * Privacy API implementation.

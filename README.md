@@ -1,8 +1,4 @@
-# Reverse pattern match question type
-
-https://moodle.org/plugins/qtype_pmatchreverse
-
-This question type was created by Tim Hunt just for fun.
+# Reverse pattern match question type [![Build Status](https://travis-ci.org/timhunt/moodle-qtype_pmatchreverse.svg?branch=master)](https://travis-ci.org/timhunt/moodle-qtype_pmatchreverse)
 
 The pattern match question type allows the teacher to grade sentences entered by
 the student using the pattern-match language. This question type does it backwards.
@@ -14,21 +10,33 @@ syntax.
 The pattern-match language is documented at
 http://docs.moodle.org/dev/The_OU_PMatch_algorithm
 
+
+## Acknowledgements
+
+This question type was created by Tim Hunt just for fun.
+
+
 ## Installation
 
-Either isntall from the Moodle plugins database, using the link above, or you can
-install the question type using git, type this command in the root of your
-Moodle install
+This plugin should be compatible with Moodle 3.4+.
 
-    git clone git://github.com/timhunt/moodle-qtype_pmatchreverse.git question/type/pmatchreverse
+### Install from the plugins database
+
+Install from the Moodle plugins database
+* https://moodle.org/plugins/qtype_pmatch
+* https://moodle.org/plugins/editor_ousupsub
+* https://moodle.org/plugins/qtype_pmatchreverse
+
+### Install using git
+
+To install using git, type these commands in the root of your Moodle install
+
+    git clone https://github.com/moodleou/moodle-qtype_pmatch.git question/type/pmatch
+    echo /question/type/pmatch/ >> .git/info/exclude
+    git clone https://github.com/moodleou/moodle-editor_ousupsub.git lib/editor/ousupsub
+    echo /lib/editor/ousupsub/ >> .git/info/exclude
+    git clone https://github.com/timhunt/moodle-qtype_pmatchreverse.git question/type/pmatchreverse
     echo '/question/type/pmatchreverse' >> .git/info/exclude
 
-Note that you also need the pmatch question type installed:
-
-    git clone git://github.com/moodleou/moodle-editor_ousupsub.git lib/editor/ousupsub
-    echo '/lib/editor/ousupsub' >> .git/info/exclude
-    git clone git://github.com/moodleou/moodle-qtype_pmatch.git question/type/pmatch
-    echo '/question/type/pmatch' >> .git/info/exclude
-
-Once the code is in place, remember to visit the Site administration -> Notifications
-page to complete the install.
+Then run the moodle update process
+Site administration > Notifications
