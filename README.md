@@ -18,7 +18,7 @@ This question type was created by Tim Hunt just for fun.
 
 ## Installation
 
-This plugin should be compatible with Moodle 3.4+.
+This plugin requires tha that the pattern-match question type is also installed.
 
 ### Install from the plugins database
 
