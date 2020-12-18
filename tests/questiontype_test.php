@@ -42,12 +42,8 @@ class qtype_pmatchreverse_test extends question_testcase {
 
     protected $qtype;
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->qtype = new qtype_pmatchreverse();
-    }
-
-    protected function tearDown() {
-        $this->qtype = null;
     }
 
     public function assert_same_xml($expectedxml, $xml) {
