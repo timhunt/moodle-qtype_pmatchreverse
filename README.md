@@ -1,4 +1,4 @@
-# Reverse pattern match question type [![Build Status](https://travis-ci.org/timhunt/moodle-qtype_pmatchreverse.svg?branch=master)](https://travis-ci.org/timhunt/moodle-qtype_pmatchreverse)
+# Reverse pattern match question type
 
 The pattern match question type allows the teacher to grade sentences entered by
 the student using the pattern-match language. This question type does it backwards.
