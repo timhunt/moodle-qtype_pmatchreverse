@@ -22,8 +22,13 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
+namespace qtype_pmatchreverse;
 defined('MOODLE_INTERNAL') || die();
+
+use test_question_maker;
+use question_state;
+use question_classified_response;
+use question_attempt_step;
 
 global $CFG;
 require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
@@ -34,9 +39,9 @@ require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
  *
  * @copyright 2013 Tim Hunt
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @group qtype_pmatchreverse
+ * @covers \qtype_pmatchreverse_question
  */
-class qtype_pmatchreverse_question_test extends advanced_testcase {
+class question_test extends \advanced_testcase {
 
     public function test_is_complete_response() {
         $question = test_question_maker::make_question('pmatchreverse');
