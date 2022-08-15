@@ -1,6 +1,11 @@
 # Change log for the Pattern match with JME question type
 
 
+## Changes 1.6
+
+* This version works with Moodle 4.0.
+
+
 ## Changes in 1.5
 
 * Fix automated tests to pass in Moodle 3.8.

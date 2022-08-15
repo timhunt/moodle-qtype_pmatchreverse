@@ -22,8 +22,13 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
+namespace qtype_pmatchreverse;
 defined('MOODLE_INTERNAL') || die();
+
+use test_question_maker;
+use question_possible_response;
+use qformat_xml;
+use question_check_specified_fields_expectation;
 
 global $CFG;
 require_once($CFG->dirroot . '/question/format/xml/format.php');
@@ -36,14 +41,14 @@ require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
  *
  * @copyright 2013 Tim Hunt
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @group qtype_pmatchreverse
+ * @covers \qtype_pmatchreverse
  */
-class qtype_pmatchreverse_test extends question_testcase {
+class questiontype_test extends \question_testcase {
 
     protected $qtype;
 
     protected function setUp(): void {
-        $this->qtype = new qtype_pmatchreverse();
+        $this->qtype = new \qtype_pmatchreverse();
     }
 
     public function assert_same_xml($expectedxml, $xml) {

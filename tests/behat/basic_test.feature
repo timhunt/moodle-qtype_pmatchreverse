@@ -14,11 +14,9 @@ Feature: Test all the basic functionality of pmatchreverse question type
     And the following "course enrolments" exist:
       | user    | course | role           |
       | teacher | C1     | editingteacher |
-    And I log in as "teacher"
-    And I am on "Course 1" course homepage
-    And I navigate to "Question bank" in current page administration
 
   Scenario: Create, edit then preview a reverse pattern match question.
+    When I am on the "Course 1" "core_question > course question bank" page logged in as teacher
     # Create a new question.
     And I add a "Reverse pattern match" question filling the form with:
       | Question name                 | My first reverse pattern match question |
@@ -33,9 +31,7 @@ Feature: Test all the basic functionality of pmatchreverse question type
     Then I should see "My first reverse pattern match question"
 
     # Preview it. Test correct and incorrect answers.
-    When I choose "Preview" action for "My first reverse pattern match question" in the question bank
-    And I switch to "questionpreview" window
-
+    And I am on the "My first reverse pattern match question" "core_question > preview" page
     And I set the following fields to these values:
       | How questions behave | Interactive with multiple tries |
       | Marked out of        | 3                               |
@@ -55,15 +51,14 @@ Feature: Test all the basic functionality of pmatchreverse question type
     When I set the field "Answer" to "match_w(sat)"
     And I press "Check"
     Then I should see "Your answer is correct."
-    Then the state of "Please enter a pattern-match expression" question is shown as "Correct"
-    And I switch to the main window
+    And the state of "Please enter a pattern-match expression" question is shown as "Correct"
 
     # Backup the course and restore it.
     When I log out
     And I log in as "admin"
     When I backup "Course 1" course using this options:
       | Confirmation | Filename | test_backup.mbz |
-    When I restore "test_backup.mbz" backup into a new course using this options:
+    And I restore "test_backup.mbz" backup into a new course using this options:
       | Schema | Course name | Course 2 |
     Then I should see "Course 2"
     When I navigate to "Question bank" in current page administration
