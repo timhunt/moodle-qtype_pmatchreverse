@@ -36,7 +36,7 @@ Feature: Test all the basic functionality of pmatchreverse question type
       | How questions behave | Interactive with multiple tries |
       | Marked out of        | 3                               |
       | Marks                | Show mark and max               |
-    And I press "Start again with these options"
+    And I press "id_saverestart"
     Then I should see "Please enter a pattern-match expression which matches, or not, the given example sentences."
     And the state of "Please enter a pattern-match expression" question is shown as "Tries remaining: 3"
     When I set the field "Answer" to "match(The cat sat on the mat)"
