@@ -14,6 +14,8 @@ Feature: Test all the basic functionality of pmatchreverse question type
     And the following "course enrolments" exist:
       | user    | course | role           |
       | teacher | C1     | editingteacher |
+    And the following config values are set as admin:
+      | enableasyncbackup | 0 |
 
   Scenario: Create, edit then preview a reverse pattern match question.
     When I am on the "Course 1" "core_question > course question bank" page logged in as teacher
