@@ -17,7 +17,7 @@ Feature: Test all the basic functionality of pmatchreverse question type
     And the following config values are set as admin:
       | enableasyncbackup | 0 |
 
-  Scenario: Create, edit then preview a reverse pattern match question.
+  Scenario: Create, edit then preview a reverse pattern match question hieu.
     When I am on the "Course 1" "core_question > course question bank" page logged in as teacher
     # Create a new question.
     And I add a "Reverse pattern match" question filling the form with:
@@ -63,7 +63,7 @@ Feature: Test all the basic functionality of pmatchreverse question type
     And I restore "test_backup.mbz" backup into a new course using this options:
       | Schema | Course name | Course 2 |
     Then I should see "Course 2"
-    When I navigate to "Question bank" in current page administration
+    And I am on the "Course 2 copy 1" "core_question > course question bank" page
     Then I should see "My first reverse pattern match question"
 
     # Edit the copy and verify the form field contents.
