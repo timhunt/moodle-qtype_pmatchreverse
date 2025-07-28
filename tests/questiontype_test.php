@@ -43,53 +43,77 @@ require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers \qtype_pmatchreverse
  */
-class questiontype_test extends \question_testcase {
+final class questiontype_test extends \question_testcase {
 
+    /** @var string The question type. */
     protected $qtype;
 
+    /**
+     * Set up the test.
+     */
     protected function setUp(): void {
+        parent::setUp();
         $this->qtype = new \qtype_pmatchreverse();
     }
 
+    #[\Override]
     public function assert_same_xml($expectedxml, $xml) {
         $this->assertEquals(str_replace("\r\n", "\n", $expectedxml),
                 str_replace("\r\n", "\n", $xml));
     }
 
+    /**
+     * Get test question data.
+     */
     protected function get_test_question_data() {
         return test_question_maker::get_question_data('pmatchreverse');
     }
 
-    public function test_name() {
+    /**
+     * Test question type name.
+     */
+    public function test_name(): void {
         $this->assertEquals($this->qtype->name(), 'pmatchreverse');
     }
 
-    public function test_can_analyse_responses() {
+    /**
+     * Test can analyze responses.
+     */
+    public function test_can_analyse_responses(): void {
         $this->assertTrue($this->qtype->can_analyse_responses());
     }
 
-    public function test_get_random_guess_score() {
+    /**
+     * Test get random guess score.
+     */
+    public function test_get_random_guess_score(): void {
         $q = test_question_maker::get_question_data('pmatchreverse');
         $this->assertEquals(0, $this->qtype->get_random_guess_score($q));
     }
 
-    public function test_get_possible_responses() {
+    /**
+     * Test get possible responses.
+     */
+    public function test_get_possible_responses(): void {
         $q = test_question_maker::get_question_data('pmatchreverse');
 
-        $this->assertEquals(array(
-            13 => array(
+        $this->assertEquals([
+            13 => [
                 1 => new question_possible_response(get_string('matchesx', 'qtype_pmatchreverse', 'frog'), 0.5),
                 0 => new question_possible_response(get_string('doesnotmatchex', 'qtype_pmatchreverse', 'frog'), 0),
-            ),
-            14 => array(
+            ],
+            14 => [
                 1 => new question_possible_response(get_string('matchesx', 'qtype_pmatchreverse', 'toad'), 0),
                 0 => new question_possible_response(get_string('doesnotmatchex', 'qtype_pmatchreverse', 'toad'), 0.5),
-            ),
-            0 => array(question_possible_response::no_response()),
-        ), $this->qtype->get_possible_responses($q));
+            ],
+            0 => [question_possible_response::no_response()],
+        ], $this->qtype->get_possible_responses($q));
     }
 
-    public function test_xml_import() {
+    /**
+     * Test xml import.
+     */
+    public function test_xml_import(): void {
         $xml = '  <question type="pmatchreverse">
     <name>
       <text>Match frog but not toad</text>
@@ -151,7 +175,10 @@ class questiontype_test extends \question_testcase {
         $this->assert(new question_check_specified_fields_expectation($expectedq), $q);
     }
 
-    public function test_xml_export() {
+    /**
+     * Test xml export.
+     */
+    public function test_xml_export(): void {
         $qdata = test_question_maker::get_question_data('pmatchreverse');
 
         $exporter = new qformat_xml();

@@ -29,6 +29,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_pmatchreverse_renderer extends qtype_with_combined_feedback_renderer {
+
+    #[\Override]
     public function formulation_and_controls(question_attempt $qa,
             question_display_options $options) {
 
@@ -42,42 +44,42 @@ class qtype_pmatchreverse_renderer extends qtype_with_combined_feedback_renderer
         }
 
         // Question text.
-        $result = html_writer::tag('div', $question->format_questiontext($qa), array('class' => 'qtext'));
+        $result = html_writer::tag('div', $question->format_questiontext($qa), ['class' => 'qtext']);
 
         // Input.
-        $attributes = array(
+        $attributes = [
             'id'    => $inputname,
             'name'  => $inputname,
             'class' => 'qtype_pmatchreverse_response',
             'rows'  => 5,
             'cols'  => 60,
-        );
+        ];
         if ($options->readonly) {
             $attributes['readonly'] = 'readonly';
         }
-        $label = html_writer::label(get_string('answer', 'question'), $inputname, false, array('class' => 'accesshide'));
+        $label = html_writer::label(get_string('answer', 'question'), $inputname, false, ['class' => 'accesshide']);
         $input = html_writer::tag('textarea', s($currentanswer), $attributes);
-        $result .= html_writer::tag('div', $label . $input, array('class' => 'ablock'));
+        $result .= html_writer::tag('div', $label . $input, ['class' => 'ablock']);
 
         // Any validation error.
         if ($qa->get_state() == question_state::$invalid) {
             $result .= html_writer::nonempty_tag('div',
-                    $question->get_validation_error(array('answer' => $currentanswer)),
-                    array('class' => 'validationerror'));
+                    $question->get_validation_error(['answer' => $currentanswer]),
+                    ['class' => 'validationerror']);
         }
 
         // Table of sentences and whether they should / do match.
         $table = new html_table();
-        $table->head = array(get_string('sentence', 'qtype_pmatchreverse'), get_string('shouldmatch', 'qtype_pmatchreverse'));
+        $table->head = [get_string('sentence', 'qtype_pmatchreverse'), get_string('shouldmatch', 'qtype_pmatchreverse')];
         if ($options->correctness || $options->feedback) {
             $table->head[] = get_string('doesmatch', 'qtype_pmatchreverse');
         }
         foreach ($question->sentences as $sentence => $shouldmatch) {
             $row = new html_table_row();
-            $row->cells = array(
+            $row->cells = [
                 new html_table_cell(s($sentence)),
                 new html_table_cell($this->display_bool($shouldmatch)),
-            );
+            ];
             if ($options->correctness || $options->feedback) {
                 $doesmatch = $question->sentence_matches_expression($sentence, $expression);
                 $row->cells[] = new html_table_cell($this->display_bool($doesmatch));
@@ -91,11 +93,14 @@ class qtype_pmatchreverse_renderer extends qtype_with_combined_feedback_renderer
         return $result;
     }
 
+    #[\Override]
     public function specific_feedback(question_attempt $qa) {
         return $this->combined_feedback($qa);
     }
 
     /**
+     * Display a boolean.
+     *
      * @param bool $bool a boolean value.
      * @return string Yes or No.
      */

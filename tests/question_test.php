@@ -41,66 +41,84 @@ require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers \qtype_pmatchreverse_question
  */
-class question_test extends \advanced_testcase {
+final class question_test extends \advanced_testcase {
 
-    public function test_is_complete_response() {
+    /**
+     * Test is response complete.
+     */
+    public function test_is_complete_response(): void {
         $question = test_question_maker::make_question('pmatchreverse');
 
-        $this->assertFalse($question->is_complete_response(array()));
-        $this->assertFalse($question->is_complete_response(array('answer' => '')));
-        $this->assertFalse($question->is_complete_response(array('answer' => 'frog')));
-        $this->assertTrue($question->is_complete_response(array('answer' => 'match(frog)')));
+        $this->assertFalse($question->is_complete_response([]));
+        $this->assertFalse($question->is_complete_response(['answer' => '']));
+        $this->assertFalse($question->is_complete_response(['answer' => 'frog']));
+        $this->assertTrue($question->is_complete_response(['answer' => 'match(frog)']));
     }
 
-    public function test_is_gradable_response() {
+    /**
+     * Test if the response is gradable.
+     */
+    public function test_is_gradable_response(): void {
         $question = test_question_maker::make_question('pmatchreverse');
 
-        $this->assertFalse($question->is_gradable_response(array()));
-        $this->assertFalse($question->is_gradable_response(array('answer' => '')));
-        $this->assertTrue($question->is_gradable_response(array('answer' => 'frog')));
-        $this->assertTrue($question->is_gradable_response(array('answer' => 'match(frog)')));
+        $this->assertFalse($question->is_gradable_response([]));
+        $this->assertFalse($question->is_gradable_response(['answer' => '']));
+        $this->assertTrue($question->is_gradable_response(['answer' => 'frog']));
+        $this->assertTrue($question->is_gradable_response(['answer' => 'match(frog)']));
     }
 
-    public function test_grading() {
+    /**
+     * Test grading.
+     */
+    public function test_grading(): void {
         $question = test_question_maker::make_question('pmatchreverse');
 
-        $this->assertEquals(array(0, question_state::$gradedwrong),
-                $question->grade_response(array('answer' => 'frog')));
-        $this->assertEquals(array(0, question_state::$gradedwrong),
-                $question->grade_response(array('answer' => 'match(toad)')));
-        $this->assertEquals(array(0.5, question_state::$gradedpartial),
-                $question->grade_response(array('answer' => 'match(frog|toad)')));
-        $this->assertEquals(array(1, question_state::$gradedright),
-                $question->grade_response(array('answer' => 'match(frog)')));
+        $this->assertEquals([0, question_state::$gradedwrong],
+                $question->grade_response(['answer' => 'frog']));
+        $this->assertEquals([0, question_state::$gradedwrong],
+                $question->grade_response(['answer' => 'match(toad)']));
+        $this->assertEquals([0.5, question_state::$gradedpartial],
+                $question->grade_response(['answer' => 'match(frog|toad)']));
+        $this->assertEquals([1, question_state::$gradedright],
+                $question->grade_response(['answer' => 'match(frog)']));
     }
 
-    public function test_get_question_summary() {
+    /**
+     * Test getting the question summary.
+     */
+    public function test_get_question_summary(): void {
         $q = test_question_maker::make_question('pmatchreverse');
         $this->assertEquals(get_string('matchx', 'qtype_pmatchreverse', 'frog') . '; ' .
                 get_string('dontmatchx', 'qtype_pmatchreverse', 'toad'), $q->get_question_summary());
     }
 
-    public function test_summarise_response() {
+    /**
+     * Test summarising responses.
+     */
+    public function test_summarise_response(): void {
         $q = test_question_maker::make_question('pmatchreverse');
-        $summary = $q->summarise_response(array('answer' => 'match(frog)'));
+        $summary = $q->summarise_response(['answer' => 'match(frog)']);
         $this->assertEquals('match(frog)', $summary);
     }
 
-    public function test_classify_response() {
+    /**
+     * Test classifying responses.
+     */
+    public function test_classify_response(): void {
         $q = test_question_maker::make_question('pmatchreverse');
         $q->start_attempt(new question_attempt_step(), 1);
 
-        $this->assertEquals(array(0 => question_classified_response::no_response()),
-                $q->classify_response(array('answer' => '')));
+        $this->assertEquals([0 => question_classified_response::no_response()],
+                $q->classify_response(['answer' => '']));
 
-        $this->assertEquals(array(
+        $this->assertEquals([
                 13 => new question_classified_response(0, 'frog', 0),
                 14 => new question_classified_response(0, 'frog', 0.5),
-            ), $q->classify_response(array('answer' => 'frog')));
+            ], $q->classify_response(['answer' => 'frog']));
 
-        $this->assertEquals(array(
+        $this->assertEquals([
                 13 => new question_classified_response(1, 'match(frog)', 0.5),
                 14 => new question_classified_response(0, 'match(frog)', 0.5),
-            ), $q->classify_response(array('answer' => 'match(frog)')));
+            ], $q->classify_response(['answer' => 'match(frog)']));
     }
 }

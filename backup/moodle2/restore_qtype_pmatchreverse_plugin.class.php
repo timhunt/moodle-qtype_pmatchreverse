@@ -35,7 +35,7 @@ class restore_qtype_pmatchreverse_plugin extends restore_qtype_plugin {
      */
     protected function define_question_plugin_structure() {
 
-        $paths = array();
+        $paths = [];
 
         // This qtype uses question_answers, add them.
         $this->add_question_question_answers($paths);
@@ -50,7 +50,9 @@ class restore_qtype_pmatchreverse_plugin extends restore_qtype_plugin {
     }
 
     /**
-     * Process the qtype/pmatchreverse element
+     * Process the qtype/pmatchreverse element.
+     *
+     * @param object $data The data.
      */
     public function process_pmatchreverse($data) {
         global $DB;
@@ -80,9 +82,9 @@ class restore_qtype_pmatchreverse_plugin extends restore_qtype_plugin {
      */
     public static function define_decode_contents() {
 
-        $contents = array();
+        $contents = [];
 
-        $fields = array('correctfeedback', 'partiallycorrectfeedback', 'incorrectfeedback');
+        $fields = ['correctfeedback', 'partiallycorrectfeedback', 'incorrectfeedback'];
         $contents[] = new restore_decode_content('qtype_pmatchreverse_options',
                 $fields, 'qtype_pmatchreverse_options');
 

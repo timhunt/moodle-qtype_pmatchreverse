@@ -37,18 +37,20 @@ require_once($CFG->dirroot . '/question/engine/lib.php');
  */
 class qtype_pmatchreverse extends question_type {
 
+    #[\Override]
     public function extra_question_fields() {
-        return array('qtype_pmatchreverse_options', 'correctfeedback', 'correctfeedbackformat',
+        return ['qtype_pmatchreverse_options', 'correctfeedback', 'correctfeedbackformat',
                 'partiallycorrectfeedback', 'partiallycorrectfeedbackformat',
-                'incorrectfeedback', 'incorrectfeedbackformat');
+                'incorrectfeedback', 'incorrectfeedbackformat'];
     }
 
+    #[\Override]
     public function save_question_options($question) {
         global $DB;
         $context = $question->context;
 
         $oldanswers = $DB->get_records('question_answers',
-                array('question' => $question->id), 'id ASC');
+                ['question' => $question->id], 'id ASC');
 
         // Insert all the new answers.
         foreach ($question->answer as $key => $answerdata) {
@@ -75,12 +77,12 @@ class qtype_pmatchreverse extends question_type {
 
         // Delete old answer records.
         foreach ($oldanswers as $oa) {
-            $DB->delete_records('question_answers', array('id' => $oa->id));
+            $DB->delete_records('question_answers', ['id' => $oa->id]);
         }
 
         // Save combined feedback.
         $options = $DB->get_record('qtype_pmatchreverse_options',
-                array('questionid' => $question->id));
+            ['questionid' => $question->id]);
         if (!$options) {
             $options = new stdClass();
             $options->questionid = $question->id;
@@ -96,6 +98,7 @@ class qtype_pmatchreverse extends question_type {
         $this->save_hints($question);
     }
 
+    #[\Override]
     protected function initialise_question_instance(question_definition $question, $questiondata) {
         parent::initialise_question_instance($question, $questiondata);
         foreach ($questiondata->options->answers as $answer) {
@@ -104,40 +107,45 @@ class qtype_pmatchreverse extends question_type {
         }
     }
 
+    #[\Override]
     public function move_files($questionid, $oldcontextid, $newcontextid) {
         parent::move_files($questionid, $oldcontextid, $newcontextid);
         $this->move_files_in_combined_feedback($questionid, $oldcontextid, $newcontextid);
         $this->move_files_in_hints($questionid, $oldcontextid, $newcontextid);
     }
 
+    #[\Override]
     protected function delete_files($questionid, $contextid) {
         parent::delete_files($questionid, $contextid);
         $this->delete_files_in_combined_feedback($questionid, $contextid);
         $this->delete_files_in_hints($questionid, $contextid);
     }
 
+    #[\Override]
     public function get_random_guess_score($questiondata) {
         return 0;
     }
 
+    #[\Override]
     public function get_possible_responses($questiondata) {
         $numparts = count($questiondata->options->answers);
-        $parts = array();
+        $parts = [];
         foreach ($questiondata->options->answers as $answer) {
             $shouldmatch = (int) $answer->fraction;
-            $parts[$answer->id] = array(
+            $parts[$answer->id] = [
                 1 => new question_possible_response(get_string('matchesx', 'qtype_pmatchreverse', $answer->answer),
                         $shouldmatch / $numparts),
                 0 => new question_possible_response(get_string('doesnotmatchex', 'qtype_pmatchreverse', $answer->answer),
                         (!$shouldmatch) / $numparts),
-            );
+            ];
         }
 
-        $parts[0] = array(question_possible_response::no_response());
+        $parts[0] = [question_possible_response::no_response()];
 
         return $parts;
     }
 
+    #[\Override]
     public function import_from_xml($data, $question, qformat_xml $format, $extra=null) {
         if (!isset($data['@']['type']) || $data['@']['type'] != $this->name()) {
             return false;
@@ -163,6 +171,7 @@ class qtype_pmatchreverse extends question_type {
         return $question;
     }
 
+    #[\Override]
     public function export_to_xml($question, qformat_xml $format, $extra = null) {
         $output = '';
         $output .= $format->write_combined_feedback($question->options, $question->id, $question->contextid);

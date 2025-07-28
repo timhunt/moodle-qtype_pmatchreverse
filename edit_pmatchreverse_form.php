@@ -30,13 +30,17 @@
  */
 class qtype_pmatchreverse_edit_form extends question_edit_form {
 
+    #[\Override]
     protected function definition_inner($mform) {
-        $this->add_per_answer_fields($mform, get_string('examplesentencen', 'qtype_pmatchreverse', '{no}'), array(
-            1 => get_string('shouldmatch', 'qtype_pmatchreverse'), 0 => get_string('shouldnotmatch', 'qtype_pmatchreverse')));
+        $this->add_per_answer_fields($mform, get_string('examplesentencen', 'qtype_pmatchreverse', '{no}'), [
+            1 => get_string('shouldmatch', 'qtype_pmatchreverse'),
+            0 => get_string('shouldnotmatch', 'qtype_pmatchreverse'),
+        ]);
         $this->add_combined_feedback_fields();
         $this->add_interactive_settings();
     }
 
+    #[\Override]
     protected function data_preprocessing($question) {
         $question = parent::data_preprocessing($question);
         $question = $this->data_preprocessing_answers($question);
@@ -52,34 +56,37 @@ class qtype_pmatchreverse_edit_form extends question_edit_form {
         return $question;
     }
 
+    #[\Override]
     protected function get_more_choices_string() {
         return get_string('addmoresentences', 'qtype_pmatchreverse');
     }
 
+    #[\Override]
     protected function get_per_answer_fields($mform, $label, $gradeoptions,
             &$repeatedoptions, &$answersoption) {
 
-        $answeroptions = array(
-            $mform->createElement('text', 'answer', '', array('size' => 40)),
+        $answeroptions = [
+            $mform->createElement('text', 'answer', '', ['size' => 40]),
             $mform->createElement('select', 'fraction', '', $gradeoptions),
-        );
+        ];
 
-        $repeated = array(
+        $repeated = [
             $mform->createElement('group', 'answeroptions', $label, $answeroptions, null, false),
-        );
+        ];
 
         $repeatedoptions['answer']['type'] = PARAM_RAW;
         $repeatedoptions['fraction']['default'] = 1;
-        $repeatedoptions['fraction']['disabledif'] = array('answer', 'eq', '');
+        $repeatedoptions['fraction']['disabledif'] = ['answer', 'eq', ''];
         $answersoption = 'answers';
 
         return $repeated;
     }
 
+    #[\Override]
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
 
-        $uniqueanswers = array();
+        $uniqueanswers = [];
         $answers = $data['answer'];
         $answercount = 0;
         foreach ($answers as $key => $answer) {
@@ -98,6 +105,7 @@ class qtype_pmatchreverse_edit_form extends question_edit_form {
         return $errors;
     }
 
+    #[\Override]
     public function qtype() {
         return 'pmatchreverse';
     }

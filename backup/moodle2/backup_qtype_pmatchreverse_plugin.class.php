@@ -49,17 +49,17 @@ class backup_qtype_pmatchreverse_plugin extends backup_qtype_plugin {
         $this->add_question_question_answers($pluginwrapper);
 
         // Now create the qtype own structures.
-        $pmatchreverse = new backup_nested_element('pmatchreverse', array('id'), array(
+        $pmatchreverse = new backup_nested_element('pmatchreverse', ['id'], [
             'correctfeedback', 'correctfeedbackformat',
             'partiallycorrectfeedback', 'partiallycorrectfeedbackformat',
-            'incorrectfeedback', 'incorrectfeedbackformat'));
+            'incorrectfeedback', 'incorrectfeedbackformat']);
 
         // Now the own qtype tree.
         $pluginwrapper->add_child($pmatchreverse);
 
         // Set source to populate the data.
         $pmatchreverse->set_source_table('qtype_pmatchreverse_options',
-                array('questionid' => backup::VAR_PARENTID));
+                ['questionid' => backup::VAR_PARENTID]);
 
         // Don't need to annotate ids nor files.
 
