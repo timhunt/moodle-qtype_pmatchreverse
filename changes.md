@@ -1,5 +1,9 @@
 # Change log for the Pattern match with JME question type
 
+## Changes 1.7
+
+* This version works with Moodle 5.0.
+
 
 ## Changes 1.6
 
