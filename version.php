@@ -28,7 +28,7 @@ $plugin->version   = 2022081500;
 $plugin->requires  = 2021051700;
 $plugin->component = 'qtype_pmatchreverse';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v1.6 for Moodle 3.11+';
+$plugin->release   = 'v1.7 for Moodle 5.0+';
 
 $plugin->dependencies = [
     'qtype_pmatch' => 2022080900,
