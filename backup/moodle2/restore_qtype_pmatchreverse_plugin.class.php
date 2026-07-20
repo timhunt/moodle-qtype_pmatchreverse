@@ -29,7 +29,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_qtype_pmatchreverse_plugin extends restore_qtype_plugin {
-
     /**
      * Returns the paths to be handled by the plugin at question level
      */
@@ -85,8 +84,11 @@ class restore_qtype_pmatchreverse_plugin extends restore_qtype_plugin {
         $contents = [];
 
         $fields = ['correctfeedback', 'partiallycorrectfeedback', 'incorrectfeedback'];
-        $contents[] = new restore_decode_content('qtype_pmatchreverse_options',
-                $fields, 'qtype_pmatchreverse_options');
+        $contents[] = new restore_decode_content(
+            'qtype_pmatchreverse_options',
+            $fields,
+            'qtype_pmatchreverse_options'
+        );
 
         return $contents;
     }

@@ -44,7 +44,6 @@ require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
  * @covers \qtype_pmatchreverse
  */
 final class questiontype_test extends \question_testcase {
-
     /** @var string The question type. */
     protected $qtype;
 
@@ -58,8 +57,10 @@ final class questiontype_test extends \question_testcase {
 
     #[\Override]
     public function assert_same_xml($expectedxml, $xml) {
-        $this->assertEquals(str_replace("\r\n", "\n", $expectedxml),
-                str_replace("\r\n", "\n", $xml));
+        $this->assertEquals(
+            str_replace("\r\n", "\n", $expectedxml),
+            str_replace("\r\n", "\n", $xml)
+        );
     }
 
     /**
@@ -155,11 +156,16 @@ final class questiontype_test extends \question_testcase {
       <text>Hint 2.</text>
     </hint>
   </question>';
-        $xmldata = xmlize($xml);
+        $hxml = new \core\xml_parser();
+        $xmldata = $hxml->parse($xml);
 
         $importer = new qformat_xml();
         $q = $importer->try_importing_using_qtypes(
-                $xmldata['question'], null, null, 'ddwtos');
+            $xmldata['question'],
+            null,
+            null,
+            'ddwtos'
+        );
 
         $expectedq = test_question_maker::get_question_form_data('pmatchreverse');
         $expectedq->questiontextformat = $expectedq->questiontext['format'];

@@ -29,7 +29,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_qtype_pmatchreverse_plugin extends backup_qtype_plugin {
-
     /**
      * Returns the qtype information to attach to question element
      */
@@ -58,8 +57,10 @@ class backup_qtype_pmatchreverse_plugin extends backup_qtype_plugin {
         $pluginwrapper->add_child($pmatchreverse);
 
         // Set source to populate the data.
-        $pmatchreverse->set_source_table('qtype_pmatchreverse_options',
-                ['questionid' => backup::VAR_PARENTID]);
+        $pmatchreverse->set_source_table(
+            'qtype_pmatchreverse_options',
+            ['questionid' => backup::VAR_PARENTID]
+        );
 
         // Don't need to annotate ids nor files.
 

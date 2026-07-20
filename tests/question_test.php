@@ -42,7 +42,6 @@ require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
  * @covers \qtype_pmatchreverse_question
  */
 final class question_test extends \advanced_testcase {
-
     /**
      * Test is response complete.
      */
@@ -73,14 +72,22 @@ final class question_test extends \advanced_testcase {
     public function test_grading(): void {
         $question = test_question_maker::make_question('pmatchreverse');
 
-        $this->assertEquals([0, question_state::$gradedwrong],
-                $question->grade_response(['answer' => 'frog']));
-        $this->assertEquals([0, question_state::$gradedwrong],
-                $question->grade_response(['answer' => 'match(toad)']));
-        $this->assertEquals([0.5, question_state::$gradedpartial],
-                $question->grade_response(['answer' => 'match(frog|toad)']));
-        $this->assertEquals([1, question_state::$gradedright],
-                $question->grade_response(['answer' => 'match(frog)']));
+        $this->assertEquals(
+            [0, question_state::$gradedwrong],
+            $question->grade_response(['answer' => 'frog'])
+        );
+        $this->assertEquals(
+            [0, question_state::$gradedwrong],
+            $question->grade_response(['answer' => 'match(toad)'])
+        );
+        $this->assertEquals(
+            [0.5, question_state::$gradedpartial],
+            $question->grade_response(['answer' => 'match(frog|toad)'])
+        );
+        $this->assertEquals(
+            [1, question_state::$gradedright],
+            $question->grade_response(['answer' => 'match(frog)'])
+        );
     }
 
     /**
@@ -88,8 +95,11 @@ final class question_test extends \advanced_testcase {
      */
     public function test_get_question_summary(): void {
         $q = test_question_maker::make_question('pmatchreverse');
-        $this->assertEquals(get_string('matchx', 'qtype_pmatchreverse', 'frog') . '; ' .
-                get_string('dontmatchx', 'qtype_pmatchreverse', 'toad'), $q->get_question_summary());
+        $this->assertEquals(
+            get_string('matchx', 'qtype_pmatchreverse', 'frog') . '; ' .
+            get_string('dontmatchx', 'qtype_pmatchreverse', 'toad'),
+            $q->get_question_summary()
+        );
     }
 
     /**
@@ -108,17 +118,25 @@ final class question_test extends \advanced_testcase {
         $q = test_question_maker::make_question('pmatchreverse');
         $q->start_attempt(new question_attempt_step(), 1);
 
-        $this->assertEquals([0 => question_classified_response::no_response()],
-                $q->classify_response(['answer' => '']));
+        $this->assertEquals(
+            [0 => question_classified_response::no_response()],
+            $q->classify_response(['answer' => ''])
+        );
 
-        $this->assertEquals([
+        $this->assertEquals(
+            [
                 13 => new question_classified_response(0, 'frog', 0),
                 14 => new question_classified_response(0, 'frog', 0.5),
-            ], $q->classify_response(['answer' => 'frog']));
+            ],
+            $q->classify_response(['answer' => 'frog'])
+        );
 
-        $this->assertEquals([
+        $this->assertEquals(
+            [
                 13 => new question_classified_response(1, 'match(frog)', 0.5),
                 14 => new question_classified_response(0, 'match(frog)', 0.5),
-            ], $q->classify_response(['answer' => 'match(frog)']));
+            ],
+            $q->classify_response(['answer' => 'match(frog)'])
+        );
     }
 }

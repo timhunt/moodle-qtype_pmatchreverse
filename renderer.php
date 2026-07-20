@@ -29,10 +29,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_pmatchreverse_renderer extends qtype_with_combined_feedback_renderer {
-
     #[\Override]
-    public function formulation_and_controls(question_attempt $qa,
-            question_display_options $options) {
+    public function formulation_and_controls(
+        question_attempt $qa,
+        question_display_options $options
+    ) {
 
         $question      = $qa->get_question();
         $currentanswer = $qa->get_last_qt_var('answer');
@@ -63,9 +64,11 @@ class qtype_pmatchreverse_renderer extends qtype_with_combined_feedback_renderer
 
         // Any validation error.
         if ($qa->get_state() == question_state::$invalid) {
-            $result .= html_writer::nonempty_tag('div',
-                    $question->get_validation_error(['answer' => $currentanswer]),
-                    ['class' => 'validationerror']);
+            $result .= html_writer::nonempty_tag(
+                'div',
+                $question->get_validation_error(['answer' => $currentanswer]),
+                ['class' => 'validationerror']
+            );
         }
 
         // Table of sentences and whether they should / do match.
@@ -84,7 +87,8 @@ class qtype_pmatchreverse_renderer extends qtype_with_combined_feedback_renderer
                 $doesmatch = $question->sentence_matches_expression($sentence, $expression);
                 $row->cells[] = new html_table_cell($this->display_bool($doesmatch));
                 $row->attributes['class'] = $this->feedback_class(
-                        (float) $question->compare_bools($shouldmatch, $doesmatch));
+                    (float) $question->compare_bools($shouldmatch, $doesmatch)
+                );
             }
             $table->data[] = $row;
         }

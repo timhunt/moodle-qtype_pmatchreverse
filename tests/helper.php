@@ -29,7 +29,6 @@
  * @copyright 2013 Tim Hunt
  */
 class qtype_pmatchreverse_test_helper extends question_test_helper {
-
     #[\Override]
     public function get_test_questions() {
         return ['frognottoad'];
