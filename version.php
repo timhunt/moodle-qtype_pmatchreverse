@@ -24,11 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022081500;
-$plugin->requires  = 2021051700;
+$plugin->version   = 2026072000;
+$plugin->requires  = 2025100600; // Requires Moodle 5.1.
 $plugin->component = 'qtype_pmatchreverse';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v1.7 for Moodle 5.0+';
+$plugin->release   = 'v1.8 for Moodle 5.2+';
+$plugin->supported = [501, 502];
 
 $plugin->dependencies = [
     'qtype_pmatch' => 2022080900,

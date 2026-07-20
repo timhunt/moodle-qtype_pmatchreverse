@@ -29,7 +29,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_pmatchreverse_edit_form extends question_edit_form {
-
     #[\Override]
     protected function definition_inner($mform) {
         $this->add_per_answer_fields($mform, get_string('examplesentencen', 'qtype_pmatchreverse', '{no}'), [
@@ -62,8 +61,13 @@ class qtype_pmatchreverse_edit_form extends question_edit_form {
     }
 
     #[\Override]
-    protected function get_per_answer_fields($mform, $label, $gradeoptions,
-            &$repeatedoptions, &$answersoption) {
+    protected function get_per_answer_fields(
+        $mform,
+        $label,
+        $gradeoptions,
+        &$repeatedoptions,
+        &$answersoption
+    ) {
 
         $answeroptions = [
             $mform->createElement('text', 'answer', '', ['size' => 40]),

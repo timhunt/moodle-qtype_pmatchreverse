@@ -36,7 +36,6 @@ require_once($CFG->dirroot . '/question/engine/lib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_pmatchreverse extends question_type {
-
     #[\Override]
     public function extra_question_fields() {
         return ['qtype_pmatchreverse_options', 'correctfeedback', 'correctfeedbackformat',
@@ -49,8 +48,11 @@ class qtype_pmatchreverse extends question_type {
         global $DB;
         $context = $question->context;
 
-        $oldanswers = $DB->get_records('question_answers',
-                ['question' => $question->id], 'id ASC');
+        $oldanswers = $DB->get_records(
+            'question_answers',
+            ['question' => $question->id],
+            'id ASC'
+        );
 
         // Insert all the new answers.
         foreach ($question->answer as $key => $answerdata) {
@@ -62,7 +64,6 @@ class qtype_pmatchreverse extends question_type {
                 $answer->answer   = trim($answerdata);
                 $answer->fraction = isset($question->fraction[$key]) && ((float) $question->fraction[$key]) > 0;
                 $DB->update_record('question_answers', $answer);
-
             } else {
                 $answer = new stdClass();
                 $answer->question       = $question->id;
@@ -81,8 +82,10 @@ class qtype_pmatchreverse extends question_type {
         }
 
         // Save combined feedback.
-        $options = $DB->get_record('qtype_pmatchreverse_options',
-            ['questionid' => $question->id]);
+        $options = $DB->get_record(
+            'qtype_pmatchreverse_options',
+            ['questionid' => $question->id]
+        );
         if (!$options) {
             $options = new stdClass();
             $options->questionid = $question->id;
@@ -133,10 +136,14 @@ class qtype_pmatchreverse extends question_type {
         foreach ($questiondata->options->answers as $answer) {
             $shouldmatch = (int) $answer->fraction;
             $parts[$answer->id] = [
-                1 => new question_possible_response(get_string('matchesx', 'qtype_pmatchreverse', $answer->answer),
-                        $shouldmatch / $numparts),
-                0 => new question_possible_response(get_string('doesnotmatchex', 'qtype_pmatchreverse', $answer->answer),
-                        (!$shouldmatch) / $numparts),
+                1 => new question_possible_response(
+                    get_string('matchesx', 'qtype_pmatchreverse', $answer->answer),
+                    $shouldmatch / $numparts
+                ),
+                0 => new question_possible_response(
+                    get_string('doesnotmatchex', 'qtype_pmatchreverse', $answer->answer),
+                    (!$shouldmatch) / $numparts
+                ),
             ];
         }
 
@@ -146,7 +153,7 @@ class qtype_pmatchreverse extends question_type {
     }
 
     #[\Override]
-    public function import_from_xml($data, $question, qformat_xml $format, $extra=null) {
+    public function import_from_xml($data, $question, qformat_xml $format, $extra = null) {
         if (!isset($data['@']['type']) || $data['@']['type'] != $this->name()) {
             return false;
         }
@@ -165,8 +172,13 @@ class qtype_pmatchreverse extends question_type {
         }
 
         $format->import_combined_feedback($question, $data);
-        $format->import_hints($question, $data, false, false,
-                $format->get_format($question->questiontextformat));
+        $format->import_hints(
+            $question,
+            $data,
+            false,
+            false,
+            $format->get_format($question->questiontextformat)
+        );
 
         return $question;
     }

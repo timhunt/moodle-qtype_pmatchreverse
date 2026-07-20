@@ -33,7 +33,6 @@ require_once($CFG->dirroot . '/question/type/pmatch/pmatchlib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_pmatchreverse_question extends question_graded_automatically_with_countback {
-
     /** @var Standard partially correct fields. */
     public $correctfeedback;
     /** @var int The format of the correct feedback. */
@@ -101,8 +100,11 @@ class qtype_pmatchreverse_question extends question_graded_automatically_with_co
         $parts = [];
         foreach ($this->sentences as $sentence => $shouldmatch) {
             $doesmatch = $this->sentence_matches_expression($sentence, $expression);
-            $parts[$this->sentenceids[$sentence]] = new question_classified_response($doesmatch, $response['answer'],
-                    $this->compare_bools($shouldmatch, $doesmatch) / $numparts);
+            $parts[$this->sentenceids[$sentence]] = new question_classified_response(
+                $doesmatch,
+                $response['answer'],
+                $this->compare_bools($shouldmatch, $doesmatch) / $numparts
+            );
         }
 
         return $parts;
@@ -137,7 +139,10 @@ class qtype_pmatchreverse_question extends question_graded_automatically_with_co
     #[\Override]
     public function is_same_response(array $prevresponse, array $newresponse) {
         return question_utils::arrays_same_at_key_missing_is_blank(
-                $prevresponse, $newresponse, 'answer');
+            $prevresponse,
+            $newresponse,
+            'answer'
+        );
     }
 
     #[\Override]
@@ -149,14 +154,20 @@ class qtype_pmatchreverse_question extends question_graded_automatically_with_co
     public function check_file_access($qa, $options, $component, $filearea, $args, $forcedownload) {
         if ($component == 'question' && $filearea == 'hint') {
             return $this->check_hint_file_access($qa, $options, $args);
-
-        } else if ($component == 'question' && in_array($filearea,
-                ['correctfeedback', 'partiallycorrectfeedback', 'incorrectfeedback'])) {
+        } else if (
+            $component == 'question' &&
+            in_array($filearea, ['correctfeedback', 'partiallycorrectfeedback', 'incorrectfeedback'])
+        ) {
             return $this->check_combined_feedback_file_access($qa, $options, $filearea, $args);
-
         } else {
-            return parent::check_file_access($qa, $options, $component, $filearea,
-                    $args, $forcedownload);
+            return parent::check_file_access(
+                $qa,
+                $options,
+                $component,
+                $filearea,
+                $args,
+                $forcedownload
+            );
         }
     }
 
